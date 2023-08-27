@@ -41,7 +41,7 @@ export default function Ads(ad: adData) {
           }`}
         >
           <img src={imageUrl} className="w-full h-[300px] md:w-[700px] md:h-[400px] lg:w-[700px] lg:h-[400px]" alt={`sliderImage${index}`} />
-          <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 p-2 text-white">
+          <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 p-2 text-white text-center font-semibold tracking-widest">
                {ad.userName && ad.userName.slice(0, 15)}
            </div>
           <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
@@ -64,7 +64,7 @@ export default function Ads(ad: adData) {
             )}
 
             <p className="my-5  text-gray-400">
-              <LocationOnIcon /> {ad.location} - {ad.contactNumber}
+            <CheckCircleOutlineOutlinedIcon className=""/><span className=""> Posted on: {ad.formattedDate}</span> - <LocationOnIcon /> {ad.location}
             </p>
 
             <a href={ad.youtube} className="mt-5">
