@@ -15,23 +15,47 @@ export default function Ads(ad: adData) {
     setButtonClicked(!buttonClicked);
   };
   console.log(ad);
+
+
+  // image slider
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = ad.imagesUrl.length;
+
+  const nextSlide = () => {
+    setCurrentSlide((currentSlide + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((currentSlide - 1 + totalSlides) % totalSlides);
+  };
   return (
     <>
       <div className="lg:flex m-0 mb:m-10 lg:m-10 lg:space-x-5">
         <div className="lg:flex-1 border-t-8 border-green-600 bg-white pb-10">
-          <Image src={ad.imagesUrl[0]} alt={ad.title} width={700} height={400} />
-          <div className="flex space-x-5">
-              {ad.imagesUrl.map((image: string, index: number) => (
-                <span key={index}>
-                  <Image
-                    src={image}
-                    alt="AdImage"
-                    className="w-[100px] h-[100px]"
-                    width={90} height={70}
-                  />
-                </span>
-              ))}
-            </div>
+        <div className="carousel">
+      {ad.imagesUrl.map((imageUrl, index) => (
+        <div
+          key={index}
+          className={`carousel-item relative w-full ${
+            currentSlide === index ? 'block' : 'hidden'
+          }`}
+        >
+          <img src={imageUrl} className="w-full h-[300px] md:w-[700px] md:h-[400px] lg:w-[700px] lg:h-[400px]" alt={`sliderImage${index}`} />
+          <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 p-2 text-white">
+               {ad.userName && ad.userName.slice(0, 15)}
+           </div>
+          <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <button className="btn btn-circle" onClick={prevSlide}>
+              ❮
+            </button>
+           
+            <button className="btn btn-circle" onClick={nextSlide}>
+              ❯
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
           <div className="m-5">
             <p className="text-2xl text-gray-700 font-bold">{ad.title}</p>
 
