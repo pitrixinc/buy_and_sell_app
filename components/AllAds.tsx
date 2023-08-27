@@ -28,7 +28,7 @@ export default function AllAds({ ads }: any) {
             height={120}
           />
 
-          <p className="m-2">
+          <p className="m-2 font-semibold">
             <Link href={`/adverts/${ad.id}`} className="hover:underline">
                  {ad.title.length > 15 ? `${ad.title.slice(0, 15)}...` : ad.title}
             </Link>
@@ -38,8 +38,8 @@ export default function AllAds({ ads }: any) {
             </span>
           </p>
 
-          <div className="ml-3 text-gray-500">
-            <MyLocationIcon /> - {ad.location}
+          <div className="ml-3 text-gray-500 text-[10px] pb-2">
+            <MyLocationIcon className="text-[10px]" /> - {ad.location}
           </div>
         </div>
       ))}

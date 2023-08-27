@@ -17,7 +17,7 @@ export default function Ads(ad: adData) {
   console.log(ad);
   return (
     <>
-      <div className="lg:flex m-10 lg:space-x-5">
+      <div className="lg:flex m-0 mb:m-10 lg:m-10 lg:space-x-5">
         <div className="lg:flex-1 border-t-8 border-green-600 bg-white pb-10">
           <Image src={ad.imagesUrl[0]} alt={ad.title} width={700} height={400} />
           <div className="flex space-x-5">
