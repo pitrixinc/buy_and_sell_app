@@ -16,7 +16,7 @@ export default function Header() {
       <img
           src="https://assets.jiji.ng/static/img/main-page/man.png"
           alt="logo"
-          className="hidden md:inline"
+          className="hidden md:inline w-full h-[320px]"
         />
       </div>
 
@@ -47,7 +47,7 @@ export default function Header() {
       <img
           src="https://assets.jiji.ng/static/img/main-page/girls.png"
           alt="logo"
-          className="hidden md:inline"
+          className="hidden md:inline w-full h-[320px]"
         />
       </div>
     </div>

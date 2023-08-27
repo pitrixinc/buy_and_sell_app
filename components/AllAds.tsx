@@ -17,7 +17,7 @@ export default function AllAds({ ads }: any) {
   });
 
   return (
-    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4">
       {ads?.map((ad: any) => (
         <div className="bg-white m-2" key={ad.id}>
           <Image
@@ -30,7 +30,7 @@ export default function AllAds({ ads }: any) {
 
           <p className="m-2">
             <Link href={`/adverts/${ad.id}`} className="hover:underline">
-              {ad.title}
+                 {ad.title.length > 15 ? `${ad.title.slice(0, 15)}...` : ad.title}
             </Link>
             <br />
             <span className="text-sm text-green-600 m-1">

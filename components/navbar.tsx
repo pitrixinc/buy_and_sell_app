@@ -106,7 +106,7 @@ export default function Navbar() {
         onClick={() => router.push("/create")}
         className="btn btn-warning btn-sm my-auto mr-10"
       >
-        SELL
+        Sell
       </button>
     </div>
   );
