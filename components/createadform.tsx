@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { currencies } from "@/lib/currencies";
 import { location } from "@/lib/location";
 import Image from 'next/image';
+import { PaystackButton } from "react-paystack";
 import {
   Checkbox,
   FormControl,
@@ -95,6 +96,7 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
           value={formData.location}
           sx={{ width: "350px", marginTop: "15px" }}
           onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+          required
         >
           {location.map((option) => (
             <MenuItem key={option.name} value={option.name}>
@@ -217,6 +219,7 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
+              required
             />
         );
         case "type":
@@ -257,6 +260,7 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
+                required
               />
             );
           case "marketprice":
@@ -292,6 +296,7 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
               onChange={(e) =>
                 setFormData({ ...formData, price: Number(e.target.value) })
               }
+              required
             />
           </FormControl>
             );
@@ -315,6 +320,7 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
                   contactNumber: Number(e.target.value),
                 })
               }
+              required
             />
           </FormControl>
             );
@@ -472,13 +478,69 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
 }
 
 export default function Createadform() {
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  const amount = 1000000
+
+
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const session: any = useSession<any | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [isPaymentEnabled, setIsPaymentEnabled] = useState(false);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+
   const filePickerRef: MutableRefObject<any | null> = useRef<any | null>(null);
+
+  const validationResult = formValidate({ ...formData });
+
+  const handlePaymentCheckbox = () => {
+    setIsPaymentEnabled(!isPaymentEnabled);
+  };
+
+  const componentProps = {
+    email,
+
+    amount,
+    currency: "GHS",
+
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Name",
+          variable_name: "name",
+          value: name,
+        },
+        {
+          display_name: "Phone",
+          variable_name: "phone",
+          value: phone,
+        },
+      ],
+
+    },
+
+    publicKey,
+
+    text: "Pay Now",
+
+    onSuccess: () => {
+    setPaymentSuccessful(true);
+    setLoading(false);
+    submitData();
+    },
+    onClose: () => {
+      setPaymentSuccessful(false);
+      setLoading(false);
+    }
+
+  }
+
+
 {/*
   type DynamicFormFieldProps = {
     field: string;
@@ -548,7 +610,7 @@ export default function Createadform() {
       return;
     }
     // Start loading spinner
-
+    if (!isPaymentEnabled || paymentSuccessful) {
     setLoading(true);
 
     // Get the current date
@@ -561,13 +623,15 @@ export default function Createadform() {
 
     if (submittionResult.error) {
       setError(submittionResult.message);
-      return;
+    } else {
+      setLoading(false);
+      setSuccess("Ad successfully created");
+      setFormData(initialState);
     }
-
-    setLoading(false);
-    setSuccess("Ad successfully created");
-    setFormData(initialState);
-  };
+  } else {
+    setError("Payment not completed or failed");
+  }
+};
 
   return (
     <div className="max-w-6xl mx-auto mt-5">
@@ -821,12 +885,65 @@ export default function Createadform() {
             {success && <Alert severity="success">{success}</Alert>}
           </div>
             */}
-          <button onClick={submitData} className="btn w-[350px] btn-accent bg-green-500 text-white">
+                  <div className="error-list">
+  {Object.entries(validationResult).map(([field, message]) => (
+    <span key={field} className={`error text-sm ${message === "Validated Successfully" ? "text-green-500" : "text-red-500"}`}>
+      {message}
+    </span>
+  ))}
+</div>
+
+
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isPaymentEnabled}
+                          onChange={handlePaymentCheckbox}
+                          disabled={validationResult.error}
+                        />
+                      }
+                      label="Promote your ad"
+                    /> <br/>
+                    {isPaymentEnabled && (
+                      <>
+<form>
+
+         <TextField
+            id="name"
+            label="Name"
+            type="text"
+            sx={{ width: "350px", marginBottom: "15px" }}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+        <TextField
+            id="email"
+            label="Email"
+            type="text"
+            sx={{ width: "350px", marginBottom: "15px" }}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+         <TextField
+            id="phone"
+            label="Phone"
+            type="text"
+            sx={{ width: "350px", marginBottom: "15px" }}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+     </form>
+
+    <PaystackButton  {...componentProps as any} className="cursor-pointer text-center text-xs tracking-wider uppercase bg-blue-600 font-bold text-white border-none rounded-md w-[350px] h-10 mt-10" />
+     </> )}
+
+     {!isPaymentEnabled && (
+          <button onClick={submitData} disabled={validationResult.error} className="btn w-[350px] btn-accent bg-green-500 text-white">
             <span
               className={`${loading ? "loading loading-spinner" : ""}`}
             ></span>
             Create Ad
           </button>
+     )}
         </div>
       </div>
     </div>

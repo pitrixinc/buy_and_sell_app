@@ -25,7 +25,7 @@ export default function Header() {
         <div className="mb-10 text-white">
           Find anything in{" "}
           <span className="bg-black text-white p-1 rounded-md">
-            <LocationOnIcon /> All Nigeria
+            <LocationOnIcon /> All Ghana
           </span>
         </div>
 
