@@ -34,13 +34,13 @@ export default function Navbar() {
       </div>
 
       <div
-        className=" p-[5px] rounded-full bg-white tooltip tooltip-bottom"
+        className=" p-[5px] rounded-full bg-white tooltip tooltip-bottom hidden md:block lg:block"
         data-tip="Bookmark"
       >
         <BookmarkIcon />
       </div>
       <div
-        className="p-[5px] rounded-full bg-white tooltip tooltip-bottom"
+        className="p-[5px] rounded-full bg-white tooltip tooltip-bottom hidden md:block lg:block"
         data-tip="Messages"
       >
         <MessageIcon />
@@ -54,7 +54,7 @@ export default function Navbar() {
       </div>
 
       <div
-        className="p-[5px] rounded-full bg-white tooltip tooltip-bottom"
+        className="p-[5px] rounded-full bg-white tooltip tooltip-bottom hidden md:block lg:block"
         data-tip="Premium Services"
       >
         <DiamondIcon />
