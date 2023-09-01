@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           {/* Navbar */}
-          <div className="bg-[#00b53f] ">
+          <div className="bg-[#00b53f] w-full">
             <Navbar />
           </div>
 
