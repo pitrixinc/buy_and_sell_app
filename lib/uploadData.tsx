@@ -34,7 +34,7 @@ export const createAd = async ({
   age,
   gender,
   size,
-  capacity
+  capacity,
 }: uploadData) => {
   let imagesUrl: Array<string> = [];
 
@@ -92,7 +92,7 @@ export const createAd = async ({
       age,
       gender,
       size,
-      capacity
+      capacity,
     });
   } catch (error) {
     return { error: true, message: "Unable to Submit AD" };

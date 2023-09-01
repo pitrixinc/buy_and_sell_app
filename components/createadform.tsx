@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { currencies } from "@/lib/currencies";
 import { location } from "@/lib/location";
 import Image from 'next/image';
-import { PaystackButton } from "react-paystack";
+// import { PaystackButton } from "react-paystack";
 import {
   Checkbox,
   FormControl,
@@ -478,26 +478,29 @@ function DynamicFormField({ field, formData, setFormData }: DynamicFormFieldProp
 }
 
 export default function Createadform() {
+
+  /* For PayStack
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const amount = 1000000
-
+  */
 
   const [formData, setFormData] = useState<FormData>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const session: any = useSession<any | null | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
-
+/* for paystack
   const [isPaymentEnabled, setIsPaymentEnabled] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
-
+*/
   const filePickerRef: MutableRefObject<any | null> = useRef<any | null>(null);
 
   const validationResult = formValidate({ ...formData });
 
+  /* PayStack implementation
   const handlePaymentCheckbox = () => {
     setIsPaymentEnabled(!isPaymentEnabled);
   };
@@ -539,7 +542,7 @@ export default function Createadform() {
     }
 
   }
-
+*/
 
 {/*
   type DynamicFormFieldProps = {
@@ -591,6 +594,7 @@ export default function Createadform() {
   };
   
 
+  /* submit with payment included
   const submitData = async () => {
     // clear error field
     setError(null);
@@ -631,6 +635,47 @@ export default function Createadform() {
   } else {
     setError("Payment not completed or failed");
   }
+};
+*/
+
+const submitData = async () => {
+  // clear error field
+  setError(null);
+  setSuccess(null);
+  const userEmail = session.data.user.email;
+  const userName = session.data?.user.name;
+  const userImage = session.data?.user.image;
+
+  // Validations
+  const validationResult: {
+    error: boolean;
+    message: string;
+  } = formValidate({ ...formData });
+
+  if (validationResult.error) {
+    setError(validationResult.message);
+    return;
+  }
+  // Start loading spinner
+
+  setLoading(true);
+
+  // Get the current date
+   const currentDate = new Date();
+   const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+
+
+  //Submittion
+  const submittionResult = await createAd({ ...formData, userEmail, userName, userImage, formattedDate });
+
+  if (submittionResult.error) {
+    setError(submittionResult.message);
+    return;
+  }
+
+  setLoading(false);
+  setSuccess("Ad successfully created");
+  setFormData(initialState);
 };
 
   return (
@@ -892,8 +937,9 @@ export default function Createadform() {
     </span>
   ))}
 </div>
+ 
 
-
+              {/*
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -944,6 +990,13 @@ export default function Createadform() {
             Create Ad
           </button>
      )}
+     */}
+         <button onClick={submitData} disabled={validationResult.error} className="btn w-[350px] btn-accent bg-green-500 text-white" >
+            <span
+              className={`${loading ? "loading loading-spinner" : ""}`}
+            ></span>
+            Create Ad
+          </button>
         </div>
       </div>
     </div>
