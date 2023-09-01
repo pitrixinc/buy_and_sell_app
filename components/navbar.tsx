@@ -61,7 +61,7 @@ export default function Navbar() {
       </div>
 
       <div
-        className="p-[5px] rounded-full bg-white tooltip tooltip-bottom hover:cursor-pointer"
+        className="p-[5px] rounded-full bg-white tooltip tooltip-bottom hover:cursor-pointer mr-2"
         data-tip="My Adverts"
         onClick={() => router.push(`/myadverts/${session.data?.user.email}`)}
       >
